@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """trace multiple color images with potrace"""
 
 # color_trace_multi
