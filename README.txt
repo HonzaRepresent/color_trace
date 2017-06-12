@@ -12,6 +12,14 @@ Also, several programs must be installed for color_trace.py to function: pngquan
 
 ----------------
 
+### macOS setup
+
+`STATIC_DEPS=true pip install lxml` (incomplete)
+
+### Ubuntu setup
+
+`apt-get install python3-lxml` (incomplete)
+
 USAGE:
 color_trace_multi.py [-h] -i src [src ...] [-o dest] [-d destdir]
                      [-c N] [-q algorithm] [-fs | -ri]
