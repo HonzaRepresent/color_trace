@@ -245,51 +245,6 @@ def get_nonpalette_color(palette, start_black=True, additional=None):
     #will fail in the case that palette+additional includes all colors #000000-#ffffff
     raise Exception("All colors exhausted, could not find a nonpalette color")
 
-
-# def isolate_color(src, destlayer, target_color, palette, stack=False):
-#     """fills the specified color of src with black, all else is white
-
-#     src: source image path, must match palette's colors
-#     destlayer: path to save output image
-#     target_color: the color to isolate (from palette)
-#     palette: list of "#010101" etc. (output from make_palette)
-#     stack: if True, colors before coloridx are white, colors after are black
-# """
-#     coloridx = palette.index(target_color)
-#     # to avoid problems when the palette contains black or white, background and
-#     # foreground colors are chosen that are not in the palette (nor black or white)
-#     bg_white = "#FFFFFF"
-#     fg_black = "#000000"
-#     bg_almost_white = get_nonpalette_color(palette, False, (bg_white, fg_black))
-#     fg_almost_black = get_nonpalette_color(palette, True, (bg_almost_white, bg_white, fg_black))
-
-#     # start off the piping of stdin/stdout
-#     with open(src, 'rb') as srcfile:
-#         stdinput = srcfile.read()
-
-#     for i, col in enumerate(palette):
-#         # fill this color with background or foreground?
-#         if i == coloridx:
-#             fill = fg_almost_black
-#         elif i > coloridx and stack:
-#             fill = fg_almost_black
-#         else:
-#             fill = bg_almost_white
-
-#         # build the imagemagick filling command and execute it
-#         command = '"{convert}" - -fill {fill} -opaque "{color}" -'.format(
-#             convert = IMAGEMAGICK_CONVERT_PATH, fill=fill, color=col)
-
-#         stdoutput = process_command(command, stdinput=stdinput, stdout_=True)
-#         stdinput = stdoutput
-
-#     # now color the foreground black and background white
-#     command = '"{convert}" - -fill {fillbg} -opaque "{colorbg}" -fill {fillfg} -opaque {colorfg} "{dest}"'.format(
-#         convert = IMAGEMAGICK_CONVERT_PATH, fillbg=bg_white, colorbg=bg_almost_white,
-#         fillfg=fg_black, colorfg=fg_almost_black, dest=destlayer)
-#     process_command(command, stdinput=stdinput)
-
-
 def isolate_color(src,target_tmp ,destlayer, target_color, palette, stack=False): #new version
     """fills the specified color of src with black, all else is white
 
