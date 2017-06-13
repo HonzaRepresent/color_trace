@@ -597,12 +597,13 @@ def q1_job(q2, total, layers, settings, findex, input, output):
     try:
         # when quantization is skipped, must use a scaling method that
         # doesn't increase the number of colors
-        if settings['colors'] == 0:
-            filter_ = 'point'
-        else:
-            filter_ = 'lanczos'
+        # if settings['colors'] == 0:
+        #     filter_ = 'point'
+        # else:
+        filter_ = 'cubic'
         rescale(input, this_scaled, settings['prescale'], filter=filter_)
 
+        print(this_scaled)
 
         if settings['colors'] is not None:
             quantize(this_scaled, this_reduced, settings['colors'], algorithm=settings['quantization'], dither=settings['dither'])
@@ -612,6 +613,8 @@ def q1_job(q2, total, layers, settings, findex, input, output):
             #argparse should have caught this
             raise Exception("One of the arguments 'colors' or 'remap' must be specified")
         palette = make_palette(this_reduced)
+
+        print(this_reduced)
 
         # update total based on the number of colors in palette
         if settings['colors'] is not None:
@@ -668,6 +671,8 @@ def q2_job(layers, layers_lock, settings, width, color, palette, findex, cindex,
         raise e
     else:
         #...or after tracing
+        # print(this_isolated)
+        # print(this_layer)
         remfiles(this_isolated, this_layer)
 
     layers_lock.acquire()
@@ -812,10 +817,10 @@ def color_trace_multi(inputs, outputs, colors, processcount, quantization='mc', 
 
 
         # show progress until all jobs have been completed
-        while progress.value < total.value:
-            sys.stdout.write("\r%.1f%%" % (progress.value / total.value * 100))
-            sys.stdout.flush()
-            time.sleep(0.25)
+        # while progress.value < total.value:
+        #     sys.stdout.write("\r%.1f%%" % (progress.value / total.value * 100))
+        #     sys.stdout.flush()
+        #     time.sleep(0.25)
 
         sys.stdout.write("\rTracing complete!\n")
 
@@ -832,7 +837,7 @@ def color_trace_multi(inputs, outputs, colors, processcount, quantization='mc', 
     # close all processes
     for p in processes:
         p.terminate()
-    shutil.rmtree(tmp)
+    # shutil.rmtree(tmp)
 
 
 def remfiles(*filepaths):
