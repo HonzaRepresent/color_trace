@@ -375,7 +375,7 @@ def get_args(cmdargs=None):
         "potrace, output color SVG file", add_help=False, prefix_chars='-')
     # help also accessible via /?
     parser.add_argument(
-        '-h', '--help', '/?',
+        '-h', '--help',
         action='help',
         help="show this help message and exit")
     # file io arguments
