@@ -372,7 +372,7 @@ def get_args(cmdargs=None):
         those provided to this script (i.e. a string that has been shlex.split)
 """
     parser = argparse.ArgumentParser(description="trace a color image with "
-        "potrace, output color SVG file", add_help=False, prefix_chars='-/')
+        "potrace, output color SVG file", add_help=False, prefix_chars='-')
     # help also accessible via /?
     parser.add_argument(
         '-h', '--help', '/?',
