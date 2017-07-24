@@ -484,7 +484,7 @@ def get_args(cmdargs=None):
             parser.error("argument -ri/--riemersma: only allowed with 'as' quantization")
 
 
-    if args.prescale is not 1 and args.tracemasksdir is not None:
+    if args.prescale != 1. and args.tracemasksdir is not None:
         parser.error("Prescaling is not available if trace masks are given explicitly")
 
     return args
@@ -568,8 +568,6 @@ def q1_job(q2, total, layers, settings, findex, input, output, tracemasksdir):
         filter_ = 'cubic'
         rescale(input, this_scaled, settings['prescale'], filter=filter_)
 
-        print(this_scaled)
-
         if settings['colors'] is not None:
             quantize(this_scaled, this_reduced, settings['colors'], algorithm=settings['quantization'], dither=settings['dither'])
         elif settings['remap'] is not None:
@@ -578,8 +576,6 @@ def q1_job(q2, total, layers, settings, findex, input, output, tracemasksdir):
             #argparse should have caught this
             raise Exception("One of the arguments 'colors' or 'remap' must be specified")
         palette = make_palette(this_reduced)
-
-        print(this_reduced)
 
         # update total based on the number of colors in palette
         if settings['colors'] is not None:
