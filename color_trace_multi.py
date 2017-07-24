@@ -623,6 +623,7 @@ def q2_job(layers, layers_lock, settings, width, color, palette, findex, cindex,
     this_trace = os.path.abspath(os.path.join(settings['tmp'], trace_format.format(findex, cindex)))
 
     print("Q2, ", tracemasksdir)
+    print(locals())
 
     try:
         # isolate & trace for this color, add to svg stack
