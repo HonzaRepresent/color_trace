@@ -77,7 +77,7 @@ def process_command(command, stdinput=None, stdout_=False, stderr_=False):
         shell=True)
 
     stdoutput, stderror = process.communicate(stdinput)
-    #print(stderror)
+    print(stderror)
     returncode = process.wait()
     if returncode != 0:
         Exception(stderror.decode())
@@ -601,6 +601,15 @@ def q1_job(q2, total, layers, settings, findex, input, output, tracemasksdir):
         remfiles(this_scaled)
 
 
+
+def mask2ppm(mask, layer_ppm):
+    """ SVG -> PPM with cut-off for Separo mask integration"""
+    command = '"{convert}" "{mask}" "{layer}"'.format(
+        convert=IMAGEMAGICK_CONVERT_PATH, mask=mask, layer=layer_ppm)
+
+    process_command(command)
+
+
 def q2_job(layers, layers_lock, settings, width, color, palette, findex, cindex, reduced, output, tracemasksdir):
     """ Isolates a color and traces it
 
@@ -623,21 +632,30 @@ def q2_job(layers, layers_lock, settings, width, color, palette, findex, cindex,
     this_trace = os.path.abspath(os.path.join(settings['tmp'], trace_format.format(findex, cindex)))
 
     print("Q2, ", tracemasksdir)
-    print(locals())
+    print(color)
 
     try:
         # isolate & trace for this color, add to svg stack
-        isolate_color(reduced, this_isolated, this_layer, color, palette, stack=settings['stack'])
+
+        # isolate_color(reduced, this_isolated, this_layer, color, palette, stack=settings['stack'])
+        separo_isolated_path = os.path.join(tracemasksdir, '%s.png' % color.lower()[1:])
+        print('Converting %s to%s' % (separo_isolated_path, this_layer))
+        # this_isolated = separo_isolated_path
+
+        mask2ppm(separo_isolated_path, this_layer)
+
         trace(this_layer, this_trace, color, settings['despeckle'], settings['smoothcorners'], settings['optimizepaths'], width)
+        print(this_trace)
     except (Exception, KeyboardInterrupt) as e:
         # delete temporary files on exception...
-        remfiles(reduced, this_isolated, this_layer, this_trace)
+        # remfiles(reduced, this_isolated, this_layer, this_trace)
         raise e
     else:
         #...or after tracing
         # print(this_isolated)
         # print(this_layer)
-        remfiles(this_isolated, this_layer)
+        # remfiles(this_isolated, this_layer)
+        pass
 
     layers_lock.acquire()
     try:
