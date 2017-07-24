@@ -604,7 +604,7 @@ def q1_job(q2, total, layers, settings, findex, input, output, tracemasksdir):
 
 def mask2ppm(mask, layer_ppm):
     """ SVG -> PPM with cut-off for Separo mask integration"""
-    command = '"{convert}" "{mask}" "{layer}"'.format(
+    command = '"{convert}" "{mask}" -threshold 90% -morphology Open Disk:2 "{layer}"'.format(
         convert=IMAGEMAGICK_CONVERT_PATH, mask=mask, layer=layer_ppm)
 
     process_command(command)
@@ -650,7 +650,7 @@ def q2_job(layers, layers_lock, settings, width, color, palette, findex, cindex,
         #...or after tracing
         # print(this_isolated)
         # print(this_layer)
-        remfiles(this_isolated, this_layer)
+        # remfiles(this_isolated, this_layer)
         pass
 
     layers_lock.acquire()
