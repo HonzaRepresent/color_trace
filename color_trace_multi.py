@@ -77,14 +77,14 @@ def process_command(command, stdinput=None, stdout_=False, stderr_=False):
         shell=True)
 
     stdoutput, stderror = process.communicate(stdinput)
-    print(stderror)
     returncode = process.wait()
     if returncode != 0:
+        print(stderror)
         Exception(stderror.decode())
     if stdout_ and not stderr_:
         return stdoutput
     elif stderr_ and not stdout_:
-        return stderr
+        return stderror
     elif stdout_ and stderr_:
         return (stdoutput, stderror)
     elif not stdout_ and not stderr_:
@@ -642,16 +642,15 @@ def q2_job(layers, layers_lock, settings, width, color, palette, findex, cindex,
             isolate_color(reduced, this_isolated, this_layer, color, palette, stack=settings['stack'])
 
         trace(this_layer, this_trace, color, settings['despeckle'], settings['smoothcorners'], settings['optimizepaths'], width)
-        print(this_trace)
     except (Exception, KeyboardInterrupt) as e:
         # delete temporary files on exception...
-        # remfiles(reduced, this_isolated, this_layer, this_trace)
+        remfiles(reduced, this_isolated, this_layer, this_trace)
         raise e
     else:
         #...or after tracing
         # print(this_isolated)
         # print(this_layer)
-        # remfiles(this_isolated, this_layer)
+        remfiles(this_isolated, this_layer)
         pass
 
     layers_lock.acquire()
